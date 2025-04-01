@@ -1,7 +1,3 @@
-
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
--- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
@@ -57,4 +53,18 @@ use({
 
 use('lewis6991/gitsigns.nvim')
 
-end)
+use({
+        'saghen/blink.cmp',
+        requires = {'rafamadriz/friendly-snippets'},
+        opts = {
+            keymap = { preset = 'default' },
+            appearance = {
+                use_nvim_cmp_as_default = true,
+            },
+            signature = { enabled = true }
+        },
+    })
+
+    use('sphamba/smear-cursor.nvim')
+
+    end)

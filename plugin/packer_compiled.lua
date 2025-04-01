@@ -79,6 +79,11 @@ _G.packer_plugins = {
     path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["blink.cmp"] = {
+    loaded = true,
+    path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/blink.cmp",
+    url = "https://github.com/saghen/blink.cmp"
+  },
   catppuccin = {
     loaded = true,
     path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/catppuccin",
@@ -98,6 +103,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
+  },
+  ["friendly-snippets"] = {
+    loaded = true,
+    path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/friendly-snippets",
+    url = "https://github.com/rafamadriz/friendly-snippets"
   },
   ["gitsigns.nvim"] = {
     loaded = true,
@@ -168,6 +178,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
+  },
+  ["smear-cursor.nvim"] = {
+    loaded = true,
+    path = "/Users/benjamincofrancesco/.local/share/nvim/site/pack/packer/start/smear-cursor.nvim",
+    url = "https://github.com/sphamba/smear-cursor.nvim"
   },
   ["telescope.nvim"] = {
     loaded = true,
