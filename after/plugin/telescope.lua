@@ -45,5 +45,5 @@ function SubmitGrepSearch()
 end
 
 vim.keymap.set("n", "<leader>ps", function()
-	ShowMenu({}, nil)
+	require("noice").redirect(SubmitGrepSearch)
 end, { desc = "Popup grep search" })

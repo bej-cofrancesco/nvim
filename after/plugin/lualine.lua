@@ -1,206 +1,161 @@
-local lualine = require("lualine")
+local git_blame = require("gitblame")
 
 local colors = {
-	bg = "#202328",
-	fg = "#bbc2cf",
-	yellow = "#ECBE7B",
-	cyan = "#008080",
-	darkblue = "#081633",
-	green = "#98be65",
-	orange = "#FF8800",
-	violet = "#a9a1e1",
-	magenta = "#c678dd",
-	blue = "#51afef",
-	red = "#ec5f67",
+	rosewater = "#f4dbd6",
+	flamingo = "#f0c6c6",
+	pink = "#f5bde6",
+	mauve = "#c6a0f6",
+	red = "#ed8796",
+	maroon = "#ee99a0",
+	peach = "#f5a97f",
+	yellow = "#eed49f",
+	green = "#a6da95",
+	teal = "#8bd5ca",
+	sky = "#91d7e3",
+	sapphire = "#7dc4e4",
+	blue = "#8aadf4",
+	lavender = "#b7bdf8",
+	text = "#cad3f5",
+	subtext1 = "#b8c0e0",
+	subtext0 = "#a5adcb",
+	overlay2 = "#939ab7",
+	overlay1 = "#8087a2",
+	overlay0 = "#6e738d",
+	surface2 = "#5b6078",
+	surface1 = "#494d64",
+	surface0 = "#363a4f",
+	base = "#24273a",
+	mantle = "#1e2030",
+	crust = "#181926",
+	white = "#fffff",
 }
 
-local conditions = {
-	buffer_not_empty = function()
-		return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
-	end,
-	hide_in_width = function()
-		return vim.fn.winwidth(0) > 80
-	end,
-	check_git_workspace = function()
-		local filepath = vim.fn.expand("%:p:h")
-		local gitdir = vim.fn.finddir(".git", filepath .. ";")
-		return gitdir and #gitdir > 0 and #gitdir < #filepath
-	end,
-}
-
-local config = {
-	options = {
-
-		component_separators = "",
-		section_separators = "",
-		theme = {
-
-			normal = { c = { fg = colors.fg, bg = colors.bg } },
-			inactive = { c = { fg = colors.fg, bg = colors.bg } },
-		},
+local theme = {
+	normal = {
+		a = { fg = colors.base, bg = colors.lavender },
+		b = { fg = colors.text, bg = colors.surface0 },
+		c = { fg = colors.text, bg = colors.base },
+		z = { fg = colors.base, bg = colors.lavender },
 	},
-	sections = {
-
-		lualine_a = {},
-		lualine_b = {},
-		lualine_y = {},
-		lualine_z = {},
-
-		lualine_c = {},
-		lualine_x = {},
+	insert = {
+		a = { fg = colors.base, bg = colors.green },
+		z = { fg = colors.base, bg = colors.green },
 	},
-	inactive_sections = {
-
-		lualine_a = {},
-		lualine_b = {},
-		lualine_y = {},
-		lualine_z = {},
-		lualine_c = {},
-		lualine_x = {},
+	visual = {
+		a = { fg = colors.base, bg = colors.mauve },
+		z = { fg = colors.base, bg = colors.mauve },
+	},
+	replace = {
+		a = { fg = colors.base, bg = colors.red },
+		z = { fg = colors.base, bg = colors.red },
+	},
+	inactive = {
+		a = { fg = colors.overlay1, bg = colors.base },
+		b = { fg = colors.overlay1, bg = colors.base },
+		c = { fg = colors.overlay1, bg = colors.base },
+		z = { fg = colors.overlay1, bg = colors.base },
 	},
 }
 
-local function ins_left(component)
-	table.insert(config.sections.lualine_c, component)
+local empty = require("lualine.component"):extend()
+function empty:draw(default_highlight)
+	self.status = ""
+	self.applied_separator = ""
+	self:apply_highlights(default_highlight)
+	self:apply_section_separators()
+	return self.status
 end
 
-local function ins_right(component)
-	table.insert(config.sections.lualine_x, component)
-end
-
-ins_left({
-	function()
-		return "▊"
-	end,
-	color = { fg = colors.blue },
-	padding = { left = 0, right = 1 },
-})
-
-ins_left({
-
-	function()
-		return ""
-	end,
-	color = function()
-		local mode_color = {
-			n = colors.red,
-			i = colors.green,
-			v = colors.blue,
-			["␖"] = colors.blue,
-			V = colors.blue,
-			c = colors.magenta,
-			no = colors.red,
-			s = colors.orange,
-			S = colors.orange,
-			["␓"] = colors.orange,
-			ic = colors.yellow,
-			R = colors.violet,
-			Rv = colors.violet,
-			cv = colors.red,
-			ce = colors.red,
-			r = colors.cyan,
-			rm = colors.cyan,
-			["r?"] = colors.cyan,
-			["!"] = colors.red,
-			t = colors.red,
-		}
-		return { fg = mode_color[vim.fn.mode()] }
-	end,
-	padding = { right = 1 },
-})
-
-ins_left({
-
-	"filesize",
-	cond = conditions.buffer_not_empty,
-})
-
-ins_left({
-	"filename",
-	cond = conditions.buffer_not_empty,
-	color = { fg = colors.magenta, gui = "bold" },
-})
-
-ins_left({ "location" })
-
-ins_left({ "progress", color = { fg = colors.fg, gui = "bold" } })
-
-ins_left({
-	"diagnostics",
-	sources = { "nvim_diagnostic" },
-	symbols = { error = " ", warn = " ", info = " " },
-	diagnostics_color = {
-		error = { fg = colors.red },
-		warn = { fg = colors.yellow },
-		info = { fg = colors.cyan },
-	},
-})
-
-ins_left({
-	function()
-		return "%="
-	end,
-})
-
-ins_left({
-
-	function()
-		local msg = "No Active Lsp"
-		local buf_ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-		local clients = vim.lsp.get_clients()
-		if next(clients) == nil then
-			return msg
+-- Put proper separators and gaps between components in sections
+local function process_sections(sections)
+	for name, section in pairs(sections) do
+		local left = name:sub(9, 10) < "x"
+		for pos = 1, name ~= "lualine_z" and #section or #section - 1 do
+			table.insert(section, pos * 2, { empty, color = { fg = colors.base, bg = colors.base } })
 		end
-		for _, client in ipairs(clients) do
-			local filetypes = client.config.filetypes
-			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-				return client.name
+		for id, comp in ipairs(section) do
+			if type(comp) ~= "table" then
+				comp = { comp }
+				section[id] = comp
 			end
+			comp.separator = left and { right = "" } or { left = "" }
 		end
-		return msg
-	end,
-	icon = " LSP:",
-	color = { fg = "#ffffff", gui = "bold" },
-})
+	end
+	return sections
+end
 
-ins_right({
-	"o:encoding",
-	fmt = string.upper,
-	cond = conditions.hide_in_width,
-	color = { fg = colors.green, gui = "bold" },
-})
+local function search_result()
+	if vim.v.hlsearch == 0 then
+		return ""
+	end
+	local last_search = vim.fn.getreg("/")
+	if not last_search or last_search == "" then
+		return ""
+	end
+	local searchcount = vim.fn.searchcount({ maxcount = 9999 })
+	return last_search .. "(" .. searchcount.current .. "/" .. searchcount.total .. ")"
+end
 
-ins_right({
-	"fileformat",
-	fmt = string.upper,
-	icons_enabled = false,
-	color = { fg = colors.green, gui = "bold" },
-})
+local function modified()
+	if vim.bo.modified then
+		return "+"
+	elseif vim.bo.modifiable == false or vim.bo.readonly == true then
+		return "-"
+	end
+	return ""
+end
 
-ins_right({
-	"branch",
-	icon = "",
-	color = { fg = colors.violet, gui = "bold" },
-})
-
-ins_right({
-	"diff",
-
-	symbols = { added = " ", modified = "󰝤 ", removed = " " },
-	diff_color = {
-		added = { fg = colors.green },
-		modified = { fg = colors.orange },
-		removed = { fg = colors.red },
+require("lualine").setup({
+	options = {
+		theme = theme,
+		component_separators = "",
+		section_separators = { left = "", right = "" },
 	},
-	cond = conditions.hide_in_width,
+	sections = process_sections({
+		lualine_a = { "mode" },
+		lualine_b = {
+			"branch",
+			"diff",
+			{
+				"diagnostics",
+				source = { "nvim" },
+				sections = { "error" },
+				diagnostics_color = { error = { bg = colors.red, fg = colors.white } },
+			},
+			{
+				"diagnostics",
+				source = { "nvim" },
+				sections = { "warn" },
+				diagnostics_color = { warn = { bg = colors.peach, fg = colors.white } },
+			},
+			{ "filename", file_status = false, path = 1 },
+			{ modified, color = { bg = colors.mauve } },
+			{
+				"%w",
+				cond = function()
+					return vim.wo.previewwindow
+				end,
+			},
+			{
+				"%r",
+				cond = function()
+					return vim.bo.readonly
+				end,
+			},
+			{
+				"%q",
+				cond = function()
+					return vim.bo.buftype == "quickfix"
+				end,
+			},
+		},
+		lualine_c = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
+		lualine_x = {},
+		lualine_y = { search_result, "filetype" },
+		lualine_z = { "%l:%c", "%p%%/%L" },
+	}),
+	inactive_sections = {
+		lualine_c = { "%f %y %m" },
+		lualine_x = {},
+	},
 })
-
-ins_right({
-	function()
-		return "▊"
-	end,
-	color = { fg = colors.blue },
-	padding = { left = 1 },
-})
-
-lualine.setup(config)
