@@ -32,7 +32,7 @@ local colors = {
 
 local theme = {
 	normal = {
-		a = { fg = colors.base, bg = colors.lavender },
+		a = { fg = colors.base, bg = colors.blue },
 		b = { fg = colors.text, bg = colors.surface0 },
 		c = { fg = colors.text, bg = colors.base },
 		z = { fg = colors.base, bg = colors.lavender },
