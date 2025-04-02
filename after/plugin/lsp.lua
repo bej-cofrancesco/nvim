@@ -56,9 +56,10 @@ mason_lspconfig.setup({
 		"custom_elements_ls",
 	},
 	handlers = {
-		theme_check = function()
-			lspconfig.theme_check.setup({
+		shopify_theme_ls = function()
+			lspconfig.shopify_theme_ls.setup({
 				autostart = true,
+				cmd = { "shopify", "theme", "language-server" },
 				filetypes = { "liquid" },
 				single_file_support = true,
 				capabilities = lsp_capabilities,
