@@ -2,7 +2,7 @@ local parsers = require("nvim-treesitter.parsers")
 local parser_config = parsers.get_parser_configs()
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "vim", "markdown", "markdown_inline", "javascript", "typescript", "liquid" },
+	ensure_installed = { "vim", "markdown", "markdown_inline", "javascript", "jsdoc", "typescript", "liquid" },
 
 	sync_install = false,
 
