@@ -1,4 +1,9 @@
-local git_blame = require("gitblame")
+return {
+  "nvim-lualine/lualine.nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+  config = function()
+    
+    local git_blame = require("gitblame")
 
 local colors = {
 	rosewater = "#f4dbd6",
@@ -159,3 +164,6 @@ require("lualine").setup({
 		lualine_x = {},
 	},
 })
+end
+
+}
