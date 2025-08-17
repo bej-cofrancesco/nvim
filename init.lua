@@ -1,1 +1,1 @@
-require('bej')
+require("bej")

@@ -1,22 +1,22 @@
 return {
-  'NickvanDyke/opencode.nvim',
-  dependencies = {
-    'folke/snacks.nvim',
-    'nvimtools/none-ls.nvim',
-    'nvim-lua/plenary.nvim',
-  },
-  ---@type opencode.Config
-  opts = {
-    auto_reload = true,
-    contexts = {
-      ---@type opencode.Context
-   },
-    terminal = {
-      win = {
-        position = 'right',
-      },
-    },
-  },
+	"NickvanDyke/opencode.nvim",
+	dependencies = {
+		"folke/snacks.nvim",
+		"nvimtools/none-ls.nvim",
+		"nvim-lua/plenary.nvim",
+	},
+	---@type opencode.Config
+	opts = {
+		auto_reload = true,
+		contexts = {
+			---@type opencode.Context
+		},
+		terminal = {
+			win = {
+				position = "right",
+			},
+		},
+	},
   -- stylua: ignore
   keys = {
     { '<leader>ot', function() require('opencode').toggle() end, desc = 'Toggle opencode' },

@@ -6,5 +6,5 @@ return {
 			variant = "moon",
 		})
 		vim.cmd("colorscheme rose-pine")
-	end
+	end,
 }
