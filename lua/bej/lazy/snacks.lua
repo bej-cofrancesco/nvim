@@ -12,6 +12,7 @@ return {
     -- Dashboard (startup screen) - similar to LazyVim
     dashboard = {
       enabled = true,
+      backdrop = false,
       preset = {
         header = [[
 ░▒▓███████▓▒░  ░▒▓████████▓▒░  ░▒▓██████▓▒░  
@@ -41,28 +42,35 @@ return {
     gitbrowse = {
       enabled = true,
       notify = true,
+    backdrop = false,
     },
     
     -- Input dialogs (like the one in telescope.lua)
     input = {
       enabled = true,
+      backdrop = false,
       win = {
         relative = "cursor",
         row = 1,
         col = 0,
         width = 60,
         style = "minimal",
+        border = "rounded",
+        blend = 10,
+        winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
       },
     },
     
     -- LazyGit integration
     lazygit = {
+        backdrop = false,
       enabled = true,
       configure = true,
     },
     
     -- Notification system (replaces vim.notify)
     notifier = {
+      backdrop = false,
       enabled = true,
       timeout = 3000,
       width = { min = 40, max = 0.4 },
@@ -90,6 +98,7 @@ return {
     -- Scratch buffers for temporary work
     scratch = {
       enabled = true,
+      backdrop = false,
       name = "scratch",
       ft = function()
         if vim.bo.buftype == "" and vim.bo.filetype == "" then
@@ -99,6 +108,11 @@ return {
       end,
       icon = nil,
       root = vim.fn.stdpath("cache") .. "/scratch",
+      win = {
+        style = "minimal",
+        border = "rounded",
+        blend = 10,
+      },
     },
     
     -- Statuscolumn improvements
@@ -119,9 +133,12 @@ return {
     -- Terminal integration
     terminal = {
       enabled = true,
+      backdrop = false,
       win = {
         position = "float",
-        backdrop = 60,
+        style = "minimal",
+        border = "rounded",
+        blend = 10,
       },
     },
     
@@ -158,6 +175,35 @@ return {
       jumplist = true,
       modes = { "n", "i", "c" },
     },
+    
+    -- Global styles for all snacks windows
+    styles = {
+      notification = {
+        backdrop = false,
+        wo = { wrap = true },
+        style = "minimal",
+        border = "rounded",
+        blend = 10,
+      },
+      scratch = {
+        backdrop = false,
+        style = "minimal", 
+        border = "rounded",
+        blend = 10,
+      },
+      lazygit = {
+        backdrop = false,
+        style = "minimal",
+        border = "rounded", 
+        blend = 10,
+      },
+      float = {
+        backdrop = false,
+        style = "minimal",
+        border = "rounded",
+        blend = 10,
+      },
+    },
   },
   keys = {
     -- Dashboard
@@ -168,7 +214,7 @@ return {
     { "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
     
     -- LazyGit
-    { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+    { "<leader>lg", function() Snacks.lazygit() end, desc = "Lazygit" },
     { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
     { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse" },
     { "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
@@ -180,18 +226,6 @@ return {
     -- Notifications
     { "<leader>n", function() Snacks.notifier.show_history() end, desc = "Notification History" },
     { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
-    
-    -- Toggle features
-    { "<leader>ub", function() Snacks.toggle.option("background", { off = "light", on = "dark" }) end, desc = "Toggle Background" },
-    { "<leader>uc", function() Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }) end, desc = "Toggle Conceal Level" },
-    { "<leader>uh", function() Snacks.toggle.inlay_hints() end, desc = "Toggle Inlay Hints" },
-    { "<leader>ul", function() Snacks.toggle.option("list") end, desc = "Toggle List" },
-    { "<leader>un", function() Snacks.toggle.option("number") end, desc = "Toggle Line Numbers" },
-    { "<leader>ur", function() Snacks.toggle.option("relativenumber") end, desc = "Toggle Relative Line Numbers" },
-    { "<leader>us", function() Snacks.toggle.option("spell") end, desc = "Toggle Spelling" },
-    { "<leader>ut", function() Snacks.toggle.treesitter() end, desc = "Toggle Treesitter Highlight" },
-    { "<leader>uw", function() Snacks.toggle.option("wrap") end, desc = "Toggle Line Wrap" },
-    { "<leader>uS", function() Snacks.toggle.option("statuscolumn") end, desc = "Toggle Statuscolumn" },
     
     -- Buffers and Windows
     { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
@@ -219,6 +253,23 @@ return {
         end
         
         vim.print = _G.dd -- Override print to use snacks debug
+        
+        -- Set transparent backgrounds for all snacks components
+        vim.api.nvim_set_hl(0, "SnacksNormal", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksBorder", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksNotifierInfo", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksNotifierWarn", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksNotifierError", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksNotifierDebug", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksNotifierTrace", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksInput", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksInputBorder", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksScratch", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksScratchBorder", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksTerminal", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksTerminalBorder", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksDashboard", { bg = "none" })
+        vim.api.nvim_set_hl(0, "SnacksDashboardBorder", { bg = "none" })
         
         -- Create notifications for common events
         vim.api.nvim_create_autocmd("BufWritePost", {

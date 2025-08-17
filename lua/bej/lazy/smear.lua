@@ -2,7 +2,7 @@ return {
   "sphamba/smear-cursor.nvim",
   config = function()
     require("smear_cursor").setup({
-      cursor_color = "#33f1ff",
+      cursor_color = "#ee0def",
       stiffness = 0.3,
       trailing_stiffness = 0.1,
       trailing_exponent = 5,
