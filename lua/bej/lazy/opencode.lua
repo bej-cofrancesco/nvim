@@ -12,8 +12,15 @@ return {
 			---@type opencode.Context
 		},
 		terminal = {
+			env = {
+				OPENCODE_THEME = "system",
+			},
 			win = {
 				position = "right",
+				blend = 10,
+				wo = {
+					winblend = 10,
+				},
 			},
 		},
 	},

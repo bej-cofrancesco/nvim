@@ -149,7 +149,11 @@ return {
 				position = "float",
 				style = "minimal",
 				border = "rounded",
-				blend = 10,
+				blend = 20,
+				wo = {
+					winbar = "",
+					winhighlight = "Normal:Normal",
+				},
 			},
 		},
 
@@ -375,8 +379,8 @@ return {
 				vim.api.nvim_set_hl(0, "SnacksInputBorder", { bg = "none" })
 				vim.api.nvim_set_hl(0, "SnacksScratch", { bg = "none" })
 				vim.api.nvim_set_hl(0, "SnacksScratchBorder", { bg = "none" })
-				vim.api.nvim_set_hl(0, "SnacksTerminal", { bg = "none" })
-				vim.api.nvim_set_hl(0, "SnacksTerminalBorder", { bg = "none" })
+				vim.api.nvim_set_hl(0, "SnacksTerminal", { bg = "none", nocombine = true })
+				vim.api.nvim_set_hl(0, "SnacksTerminalBorder", { bg = "none", nocombine = true })
 				vim.api.nvim_set_hl(0, "SnacksDashboard", { bg = "none" })
 				vim.api.nvim_set_hl(0, "SnacksDashboardBorder", { bg = "none" })
 				vim.api.nvim_set_hl(0, "SnacksLazygit", { bg = "none" })

@@ -9,6 +9,14 @@ return {
 		require("telescope").setup({
 			defaults = {
 				winblend = 10, -- Add transparency to telescope windows
+				file_ignore_patterns = {
+					"node_modules",
+					".git",
+					"dist",
+					"build",
+					"vendor",
+					"target",
+				},
 			},
 		})
 

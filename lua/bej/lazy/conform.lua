@@ -20,11 +20,6 @@ return {
 				python = { "black" },
 			},
 			formatters = {
-				prettier = {
-					command = "foxmat",
-					args = { "--stdin-filepath", "$FILENAME" },
-					stdin = true,
-				},
 				stylua = {
 					command = "stylua",
 					args = { "--stdin-filepath", "$FILENAME", "-" },
