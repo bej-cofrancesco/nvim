@@ -1,1 +1,2 @@
-require("bej")
+require("config.bej")
+
