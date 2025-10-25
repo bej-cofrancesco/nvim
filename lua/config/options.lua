@@ -80,3 +80,8 @@ vim.opt.winblend = 10
 vim.opt.pumblend = 10
 
 vim.g.lazyvim_check_order = false
+
+vim.opt.writebackup = false
+vim.opt.backup = false
+
+vim.opt.swapfile = false
